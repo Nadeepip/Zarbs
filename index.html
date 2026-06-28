@@ -7,171 +7,30 @@
     <script src="supabase.js" defer></script>
     <script src="game-db.js" defer></script>
     <style>
-        @font-face {
-            font-family: 'Vazirmatn';
-            src: url('Vazirmatn-Regular.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Vazirmatn';
-            src: url('Vazirmatn-Bold.woff2') format('woff2');
-            font-weight: bold;
-            font-style: normal;
-        }
-        :root {
-            --primary: #2c3e50;
-            --accent: #27ae60;
-            --wrong: #c0392b;
-            --highlight: #f39c12;
-            --bg: #f0f4f8;
-            --box-bg: #ffffff;
-            --sent: #7f8c8d;
-            --carry-red: #e74c3c;
-        }
-        * {
-            box-sizing: border-box;
-            font-family: 'Vazirmatn', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            background-color: var(--bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--primary);
-            padding: 10px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .screen {
-            display: none !important;
-        }
-        .screen.active {
-            display: block !important;
-        }
-        #portal-submitting-screen.active {
-            display: flex !important;
-        }
-        #screen-assistant.active {
-            display: block !important;
-        }
-        .container {
-            background: var(--box-bg);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            position: relative;
-        }
-        h1, h2 {
-            margin-bottom: 10px;
-            color: #2980b9;
-            font-size: 1.4em;
-        }
-        .school-name {
-            font-size: 0.85em;
-            color: #7f8c8d;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-            display: block;
-        }
-        .carry-over-container {
-            position: absolute;
-            top: 130px;
-            right: 2px;
-            background: rgba(255, 248, 225, 0.95);
-            border: 1px dashed #f1c40f;
-            padding: 5px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            z-index: 50;
-        }
-        .carry-input {
-            width: 32px;
-            height: 32px;
-            border: 1px solid #ccc;
-            border-radius: 50%;
-            text-align: center;
-            font-size: 1.2em;
-            outline: none;
-            cursor: pointer;
-            background: white;
-            padding: 0;
-            margin: 0;
-            transition: all 0.3s;
-        }
-        .carry-input.active-carry {
-            border-color: #e74c3c;
-            background-color: #fadbd8;
-            font-weight: bold;
-        }
-        .carry-input.used {
-            text-decoration: line-through;
-            color: #aaa;
-            background: #eee;
-        }
-        .btn {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 0.95em;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 5px;
-            font-weight: bold;
-        }
-        .btn-secondary {
-            background-color: #e67e22;
-        }
-        .btn-info {
-            background-color: #3498db;
-        }
-        .btn-hidden {
-            display: none !important;
-        }
-        .btn-eraser {
-            background-color: var(--wrong) !important;
-        }
-        .carry-clear-btn {
-            padding: 5px 8px !important;
-            font-size: 1.1em !important;
-            width: fit-content;
-            margin: 5px 0 0 0 !important;
-            align-self: flex-end;
-            border-radius: 5px;
-            line-height: 1;
-        }
-        .row-check-btn {
-            padding: 0;
-            font-size: 0.75em;
-            background-color: #3498db;
-            border-radius: 5px;
-            height: 34px;
-            width: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            visibility: hidden;
-            margin: 0 auto;
-        }
-        .math-grid {
-            display: inline-grid;
-            grid-template-columns: repeat(7, 40px) 70px;
-            gap: 6px 4px;
-            margin: 20px auto;
-            direction: ltr;
-            align-items: center;
-            justify-content: center;
-        }
+        @font-face{font-family:'Vazirmatn';src:url('Vazirmatn-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;}
+        @font-face{font-family:'Vazirmatn';src:url('Vazirmatn-Bold.woff2') format('woff2');font-weight:bold;font-style:normal;}
+        :root{--primary:#2c3e50;--accent:#27ae60;--wrong:#c0392b;--highlight:#f39c12;--bg:#f0f4f8;--box-bg:#ffffff;--sent:#7f8c8d;--carry-red:#e74c3c;}
+        *{box-sizing:border-box;font-family:'Vazirmatn',sans-serif;margin:0;padding:0;}
+        body{background-color:var(--bg);display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--primary);padding:10px;-webkit-tap-highlight-color:transparent;}
+        .screen{display:none !important;}
+        .screen.active{display:block !important;}
+        #portal-submitting-screen.active{display:flex !important;}
+        #screen-assistant.active{display:block !important;}
+        .container{background:var(--box-bg);padding:20px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:600px;text-align:center;position:relative;}
+        h1,h2{margin-bottom:10px;color:#2980b9;font-size:1.4em;}
+        .school-name{font-size:0.85em;color:#7f8c8d;margin-bottom:15px;border-bottom:1px solid #eee;padding-bottom:8px;display:block;}
+        .carry-over-container{position:absolute;top:130px;right:2px;background:rgba(255,248,225,0.95);border:1px dashed #f1c40f;padding:5px;border-radius:8px;display:flex;flex-direction:column;gap:6px;box-shadow:0 2px 5px rgba(0,0,0,0.05);z-index:50;}
+        .carry-input{width:32px;height:32px;border:1px solid #ccc;border-radius:50%;text-align:center;font-size:1.2em;outline:none;cursor:pointer;background:white;padding:0;margin:0;transition:all 0.3s;}
+        .carry-input.active-carry{border-color:#e74c3c;background-color:#fadbd8;font-weight:bold;}
+        .carry-input.used{text-decoration:line-through;color:#aaa;background:#eee;}
+        .btn{background-color:var(--accent);color:white;border:none;padding:10px 15px;font-size:0.95em;border-radius:8px;cursor:pointer;margin:5px;font-weight:bold;}
+        .btn-secondary{background-color:#e67e22;}
+        .btn-info{background-color:#3498db;}
+        .btn-hidden{display:none !important;}
+        .btn-eraser{background-color:var(--wrong) !important;}
+        .carry-clear-btn{padding:5px 8px !important;font-size:1.1em !important;width:fit-content;margin:5px 0 0 0 !important;align-self:flex-end;border-radius:5px;line-height:1;}
+        .row-check-btn{padding:0;font-size:0.75em;background-color:#3498db;border-radius:5px;height:34px;width:60px;display:flex;align-items:center;justify-content:center;visibility:hidden;margin:0 auto;}
+        .math-grid{display:inline-grid;grid-template-columns:repeat(7,40px) 70px;gap:6px 4px;margin:20px auto;direction:ltr;align-items:center;justify-content:center;}
         @media (max-width: 450px) {
             .math-grid {
                 grid-template-columns: repeat(7, 34px) 60px;
@@ -1290,84 +1149,99 @@
     async function authenticatePortalStudent() {
         await Portal.authenticate({
             onSuccess: (data) => {
-                document.getElementById('portal-welcome-section').style.display = '';
-                document.getElementById('startGame').style.display = '';
-                document.getElementById('portal-error-section').style.display = 'none';
+                try {
+                    document.getElementById('portal-welcome-section').style.display = '';
+                    document.getElementById('startGame').style.display = '';
+                    document.getElementById('portal-error-section').style.display = 'none';
 
-                STORAGE = `studentProfile_Zarb3x3_${Portal.studentId}_${Portal.homeworkId}`;
-                GAME_STATE_STORAGE = `gameState_Zarb3x3_${Portal.studentId}_${Portal.homeworkId}`;
-                
-                const saved = localStorage.getItem(STORAGE);
-                let parsedState = null;
-                if (saved) {
-                    try {
-                        parsedState = JSON.parse(saved);
-                    } catch (e) {}
-                }
+                    STORAGE = `studentProfile_Zarb3x3_${Portal.studentId}_${Portal.homeworkId}`;
+                    GAME_STATE_STORAGE = `gameState_Zarb3x3_${Portal.studentId}_${Portal.homeworkId}`;
+                    
+                    const saved = localStorage.getItem(STORAGE);
+                    let parsedState = null;
+                    if (saved) {
+                        try {
+                            parsedState = JSON.parse(saved);
+                        } catch (e) {}
+                    }
 
-                if (parsedState && typeof parsedState === 'object') {
-                    state = parsedState;
-                    if (!state.gridValues) state.gridValues = {};
-                    if (!state.carryStates) state.carryStates = {};
-                    if (!state.addCarryValues) state.addCarryValues = {};
-                    if (typeof state.currentGameUsedHint === 'undefined') state.currentGameUsedHint = false;
-                    if (typeof state.currentScreen === 'undefined') state.currentScreen = 'register';
-                } else {
-                    state = {
-                        name: data.name,
-                        stars: data.stars,
-                        totalPlays: data.plays,
-                        currentProblem: null,
-                        currentGameUsedHint: false,
-                        reportSent: false,
-                        gridValues: {},
-                        carryStates: {},
-                        addCarryValues: {},
-                        currentScreen: 'register'
-                    };
-                }
-                
-                state.name = data.name || Portal.studentName || state.name || "دانش‌آموز";
-                state.totalPlays = data.plays !== undefined ? data.plays : state.totalPlays;
-                state.stars = data.stars !== undefined ? data.stars : state.stars;
-                
-                saveProfile();
-                updateStats();
+                    if (parsedState && typeof parsedState === 'object') {
+                        state = parsedState;
+                        if (!state.gridValues) state.gridValues = {};
+                        if (!state.carryStates) state.carryStates = {};
+                        if (!state.addCarryValues) state.addCarryValues = {};
+                        if (typeof state.currentGameUsedHint === 'undefined') state.currentGameUsedHint = false;
+                        if (typeof state.currentScreen === 'undefined') state.currentScreen = 'register';
+                    } else {
+                        state = {
+                            name: data.name,
+                            stars: data.stars,
+                            totalPlays: data.plays,
+                            currentProblem: null,
+                            currentGameUsedHint: false,
+                            reportSent: false,
+                            gridValues: {},
+                            carryStates: {},
+                            addCarryValues: {},
+                            currentScreen: 'register'
+                        };
+                    }
+                    
+                    state.name = data.name || Portal.studentName || state.name || "دانش‌آموز";
+                    state.totalPlays = data.plays !== undefined ? data.plays : state.totalPlays;
+                    state.stars = data.stars !== undefined ? data.stars : state.stars;
+                    
+                    saveProfile();
+                    updateStats();
 
-                document.getElementById('portal-student-name').textContent = state.name;
-                document.getElementById('portal-prev-plays').textContent = toPersianNum(state.totalPlays);
-                document.getElementById('portal-prev-stars').textContent = toPersianNum(state.stars) + ' ⭐';
-                document.getElementById('portal-req-stars').textContent = toPersianNum(Portal.requiredStars) + ' ⭐';
+                    document.getElementById('portal-student-name').textContent = state.name;
+                    document.getElementById('portal-prev-plays').textContent = toPersianNum(state.totalPlays);
+                    document.getElementById('portal-prev-stars').textContent = toPersianNum(state.stars) + ' ⭐';
+                    document.getElementById('portal-req-stars').textContent = toPersianNum(Portal.requiredStars) + ' ⭐';
 
-                const activeState = checkSavedUnfinishedState();
-                const startBtn = document.getElementById('startGame');
-                if (activeState) {
-                    startBtn.textContent = 'ادامه بازی (باقیمانده) 🔄';
-                    startBtn.style.backgroundColor = '#ff9800';
-                } else {
-                    startBtn.textContent = 'شروع بازی تکلیف 🎮';
-                    startBtn.style.backgroundColor = '#2ecc71';
-                }
+                    const activeState = checkSavedUnfinishedState();
+                    const startBtn = document.getElementById('startGame');
+                    if (activeState) {
+                        startBtn.textContent = 'ادامه بازی (باقیمانده) 🔄';
+                        startBtn.style.backgroundColor = '#ff9800';
+                    } else {
+                        startBtn.textContent = 'شروع بازی تکلیف 🎮';
+                        startBtn.style.backgroundColor = '#2ecc71';
+                    }
 
-                const needsSubmitKey = `portal_needs_submit_${Portal.gameId}_${Portal.studentId}_${Portal.homeworkId}`;
-                const hasUnsentStar = localStorage.getItem(needsSubmitKey) === 'true';
+                    const needsSubmitKey = `portal_needs_submit_${Portal.gameId}_${Portal.studentId}_${Portal.homeworkId}`;
+                    const hasUnsentStar = localStorage.getItem(needsSubmitKey) === 'true';
 
-                if (hasUnsentStar) {
-                    document.getElementById('ast-welcome').textContent = `سلام ${state.name} عزیز! 🌟`;
-                    document.getElementById('ast-name').textContent = state.name;
-                    document.getElementById('ast-stars').textContent = toPersianNum(state.stars) + ' ⭐';
-                    document.getElementById('ast-req-stars').textContent = toPersianNum(Portal.requiredStars) + ' ⭐';
-                    showScreen('screen-assistant');
-                } else if (state.currentScreen === 'report') {
-                    showScreen('screen-report');
-                    renderReport(state.stars >= Portal.requiredStars, state.stars);
-                } else if (state.currentProblem && activeState) {
-                    showScreen('screen-game');
-                    loadState();
-                    renderGrid(state.currentProblem);
-                    restoreGridState();
-                } else {
+                    if (hasUnsentStar) {
+                        document.getElementById('ast-welcome').textContent = `سلام ${state.name} عزیز! 🌟`;
+                        document.getElementById('ast-name').textContent = state.name;
+                        document.getElementById('ast-stars').textContent = toPersianNum(state.stars) + ' ⭐';
+                        document.getElementById('ast-req-stars').textContent = toPersianNum(Portal.requiredStars) + ' ⭐';
+                        showScreen('screen-assistant');
+                    } else if (state.currentScreen === 'report') {
+                        showScreen('screen-report');
+                        renderReport(state.stars >= Portal.requiredStars, state.stars);
+                    } else if (state.currentProblem && activeState) {
+                        try {
+                            showScreen('screen-game');
+                            loadState();
+                            renderGrid(state.currentProblem);
+                            restoreGridState();
+                        } catch (ex) {
+                            clearGameState();
+                            state.currentProblem = null;
+                            state.currentScreen = 'register';
+                            saveProfile();
+                            showScreen('screen-register');
+                        }
+                    } else {
+                        showScreen('screen-register');
+                    }
+                } catch (errGlobal) {
                     showScreen('screen-register');
+                    document.getElementById('portal-welcome-section').style.display = 'none';
+                    document.getElementById('startGame').style.display = 'none';
+                    document.getElementById('portal-error-section').style.display = 'block';
                 }
             },
             onFailure: (err) => {
@@ -1393,19 +1267,30 @@
     }
 
     document.getElementById('startGame').onclick = () => {
-        state.currentGameUsedHint = false;
-        state.currentScreen = 'game';
-        const activeState = checkSavedUnfinishedState();
-        if (activeState) {
-            loadState();
-            renderGrid(state.currentProblem);
-            restoreGridState();
-        } else {
+        try {
+            state.currentGameUsedHint = false;
+            state.currentScreen = 'game';
+            const activeState = checkSavedUnfinishedState();
+            if (activeState) {
+                loadState();
+                renderGrid(state.currentProblem);
+                restoreGridState();
+            } else {
+                newQuestion();
+            }
+            showScreen('screen-game');
+            updateStats();
+            saveProfile();
+        } catch (e) {
+            clearGameState();
+            state.currentProblem = null;
+            state.currentScreen = 'game';
+            saveProfile();
             newQuestion();
+            showScreen('screen-game');
+            updateStats();
+            saveProfile();
         }
-        showScreen('screen-game');
-        updateStats();
-        saveProfile();
     };
 
     document.addEventListener('DOMContentLoaded', () => {
