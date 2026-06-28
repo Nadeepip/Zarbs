@@ -14,6 +14,7 @@
         body{background-color:var(--bg);display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--primary);padding:10px;-webkit-tap-highlight-color:transparent;}
         .screen{display:none !important;}
         .screen.active{display:block !important;}
+        .hidden{display:none !important;}
         #portal-submitting-screen.active{display:flex !important;}
         #screen-assistant.active{display:block !important;}
         .container{background:var(--box-bg);padding:20px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:600px;text-align:center;position:relative;}
@@ -46,166 +47,29 @@
                 height: 18px;
             }
         }
-        .cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            transition: all 0.3s;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-        }
-        .add-carry-cell {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            font-size: 1em;
-            font-weight: bold;
-            color: var(--carry-red);
-            height: 20px;
-            width: 100%;
-            margin-bottom: -8px;
-            z-index: 10;
-        }
-        .highlight-digit {
-            background-color: #ffe082;
-            color: #d35400;
-            border: 2px solid #f39c12;
-            transform: scale(1.1);
-        }
-        .col-highlight {
-            background-color: #e3f2fd;
-            border-radius: 4px;
-        }
-        .input-cell {
-            width: 38px;
-            height: 38px;
-            font-size: 1.3em;
-            text-align: center;
-            border: 2px solid #bdc3c7;
-            border-radius: 6px;
-            background: #fafafa;
-            padding: 0;
-            -moz-appearance: textfield;
-        }
-        .input-cell:focus {
-            background: #e8f0fe;
-            border-color: #2980b9;
-        }
-        .input-cell:read-only {
-            background: #f0f0f0;
-            color: #555;
-            cursor: default;
-        }
-        .correct-input {
-            background-color: #d4edda !important;
-            border-color: var(--accent) !important;
-            color: var(--accent);
-        }
-        .wrong-input {
-            background-color: #f8d7da !important;
-            border-color: var(--wrong) !important;
-            color: var(--wrong);
-            cursor: pointer;
-        }
-        @keyframes blink-fill {
-            0% { background-color: #ffe082; transform: scale(1.1); box-shadow: 0 0 10px #f39c12; }
-            50% { background-color: #f1c40f; transform: scale(1.15); border-color: #d35400; }
-            100% { background-color: #d4edda; transform: scale(1); box-shadow: none; }
-        }
-        .newly-filled {
-            animation: blink-fill 1.2s ease-in-out;
-            z-index: 20;
-        }
-        @keyframes blink-text {
-            0% { transform: scale(1.5); color: #d35400; }
-            50% { transform: scale(1.8); color: #e74c3c; }
-            100% { transform: scale(1); color: var(--carry-red); }
-        }
-        .newly-filled-text {
-            animation: blink-text 1.2s ease-in-out;
-        }
-        .line {
-            grid-column: 1 / 9;
-            height: 2px;
-            background-color: #333;
-            margin: 4px 0;
-        }
-        .operator {
-            grid-column: 1 / 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4em;
-            color: #555;
-        }
-        .hint-alert {
-            background: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            display: none;
-            border: 1px solid #ffeeba;
-            text-align: right;
-            line-height: 1.6;
-        }
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            background: #ecf0f1;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-        }
-        .modal-box {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            animation: fadeIn 0.3s ease-out;
-        }
-        .modal-title {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #c0392b;
-            margin-bottom: 10px;
-        }
-        .modal-text {
-            font-size: 0.95em;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .cell{display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:bold;transition:all 0.3s;border-radius:50%;width:38px;height:38px;}
+        .add-carry-cell{display:flex;align-items:flex-end;justify-content:center;font-size:1em;font-weight:bold;color:var(--carry-red);height:20px;width:100%;margin-bottom:-8px;z-index:10;}
+        .highlight-digit{background-color:#ffe082;color:#d35400;border:2px solid #f39c12;transform:scale(1.1);}
+        .col-highlight{background-color:#e3f2fd;border-radius:4px;}
+        .input-cell{width:38px;height:38px;font-size:1.3em;text-align:center;border:2px solid #bdc3c7;border-radius:6px;background:#fafafa;padding:0;-moz-appearance:textfield;}
+        .input-cell:focus{background:#e8f0fe;border-color:#2980b9;}
+        .input-cell:read-only{background:#f0f0f0;color:#555;cursor:default;}
+        .correct-input{background-color:#d4edda !important;border-color:var(--accent) !important;color:var(--accent);}
+        .wrong-input{background-color:#f8d7da !important;border-color:var(--wrong) !important;color:var(--wrong);cursor:pointer;}
+        .line{grid-column:1/9;height:2px;background-color:#333;margin:4px 0;}
+        .operator{grid-column:1/2;display:flex;align-items:center;justify-content:center;font-size:1.4em;color:#555;}
+        .stats-bar{display:flex;justify-content:space-between;background:#ecf0f1;padding:8px 12px;border-radius:8px;margin-bottom:15px;font-size:0.9em;}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+        .modal-box{background:white;padding:25px 20px;border-radius:15px;width:90%;max-width:350px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.25);animation:fadeIn 0.3s ease-out;}
+        .modal-title{font-weight:bold;font-size:1.2em;color:#c0392b;margin-bottom:10px;}
+        .modal-text{font-size:0.95em;color:#555;line-height:1.6;margin-bottom:20px;}
+        .modal-buttons{display:flex;justify-content:center;gap:10px;}
+        .hint-alert{background:#fff3cd;color:#856404;padding:10px;border-radius:5px;margin-top:15px;font-size:0.9em;display:none;border:1px solid #ffeeba;text-align:right;line-height:1.6;}
+        @keyframes blink-fill{0%{background-color:#ffe082;transform:scale(1.1);box-shadow:0 0 10px #f39c12;}50%{background-color:#f1c40f;transform:scale(1.15);border-color:#d35400;}100%{background-color:#d4edda;transform:scale(1);box-shadow:none;}}
+        .newly-filled{animation:blink-fill 1.2s ease-in-out;z-index:20;}
+        @keyframes blink-text{0%{transform:scale(1.5);color:#d35400;}50%{transform:scale(1.8);color:#e74c3c;}100%{transform:scale(1);color:var(--carry-red);}}
+        .newly-filled-text{animation:blink-text 1.2s ease-in-out;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
     </style>
 </head>
 <body>
@@ -298,13 +162,24 @@
     </div>
 
     <div class="screen" id="screen-game">
+        <div id="carryOverBox" class="carry-over-container" style="display:none;">
+            <input type="tel" inputmode="numeric" id="carry_0" class="carry-input" oninput="handleCarryInput(this)" onclick="toggleStrike(this)">
+            <input type="tel" inputmode="numeric" id="carry_1" class="carry-input" oninput="handleCarryInput(this)" onclick="toggleStrike(this)">
+            <input type="tel" inputmode="numeric" id="carry_2" class="carry-input" oninput="handleCarryInput(this)" onclick="toggleStrike(this)">
+            <button id="clearCarryBtn" class="btn btn-eraser btn-hidden carry-clear-btn" onclick="resetCarryOver()">🧹</button>
+        </div>
+
         <div class="stats-bar">
             <span id="dispName">دانش‌آموز</span>
             <span>⭐ ستاره: <span id="dispStars">۰</span></span>
         </div>
+
         <h2>ضرب سه رقم در سه رقم</h2>
+
         <div id="game-area"></div>
+
         <div id="hintAlertBox" class="hint-alert"></div>
+
         <div style="margin-top: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
             <button id="hintBtn" class="btn btn-secondary" onclick="revealOneStepHint()">راهنمای گام‌به‌گام 💡</button>
             <button id="finishBtn" class="btn btn-hidden" style="background:#7f8c8d;" onclick="finishSession()">ثبت امتیاز و مشاهده کارنامه 🏆</button>
@@ -322,11 +197,15 @@
             <p><strong>ستاره‌های گرفته‌شده:</strong> <span id="repStars">۰</span></p>
             <p id="portal-req-stars-row" style="display:none;"><strong>🎯 ستاره مورد نیاز تکلیف:</strong> <span id="repReqStars">۰ ⭐</span></p>
         </div>
+
         <div id="portal-submit-badge" style="display:none; background:#fff3e0; border:1px solid #ffe082; color:#e65100; padding:15px; border-radius:12px; margin-bottom:12px; font-weight:bold; font-size:12.5pt; line-height:1.6; text-align:right; width: 100%;"></div>
+
         <div id="portal-goal-reached-badge" style="display:none; background:#e8f5e9; border:2px solid #2e7d32; color:#1b5e20; padding:15px; border-radius:12px; margin-bottom:15px; font-weight:bold; font-size:12.5pt; line-height:1.6; direction:rtl; text-align:right; width: 100%;">
             🎉 هوراااا قهرمان پرتلاش! هدف تکلیف رو کاملاً ترکوندی و همه‌ی ستاره‌های مورد نیاز رو گرفتی! تو فوق‌العاده‌ای! 🥇 حالا می‌تونی با خیال راحت به پرتال برگردی. خداقوت! ❤️
         </div>
+
         <div id="portal-back-instruction" style="display:none; width: 100%;"></div>
+
         <br>
         <button id="playAgainBtn" class="btn" onclick="restartGame()">تلاش دوباره 🔄</button>
     </div>
@@ -529,7 +408,8 @@
         document.querySelectorAll('.carry-input').forEach(inp => {
             inp.value = ''; inp.classList.remove('used', 'active-carry');
         });
-        document.getElementById('clearCarryBtn').classList.add('btn-hidden'); 
+        const btn = document.getElementById('clearCarryBtn');
+        if (btn) btn.classList.add('btn-hidden'); 
         saveGridState();
     }
     
@@ -538,8 +418,10 @@
         let filledCount = 0;
         boxes.forEach(inp => { if (inp.value) filledCount++; });
         const btn = document.getElementById('clearCarryBtn');
-        if (filledCount > 0) btn.classList.remove('btn-hidden');
-        else btn.classList.add('btn-hidden');
+        if (btn) {
+            if (filledCount > 0) btn.classList.remove('btn-hidden');
+            else btn.classList.add('btn-hidden');
+        }
     }
 
     function handleCarryInput(el) {
@@ -619,7 +501,7 @@
                     prevInput.value = ""; 
                     prevInput.classList.remove('correct-input', 'wrong-input');
                     const btn = document.getElementById(`btn_row_${rowIdx}`);
-                    if(btn.innerText === "پاک‌کن") resetBtnToCheck(btn, rowIdx);
+                    if(btn && btn.innerText === "پاک‌کن") resetBtnToCheck(btn, rowIdx);
                     saveGridState();
                 }
             }
@@ -656,7 +538,7 @@
         }
         el.classList.remove('correct-input', 'wrong-input');
         const btn = document.getElementById(`btn_row_${rowIdx}`);
-        if(btn.innerText === "پاک‌کن") resetBtnToCheck(btn, rowIdx);
+        if(btn && btn.innerText === "پاک‌کن") resetBtnToCheck(btn, rowIdx);
         checkRowFilled(rowIdx); saveGridState();
     }
 
@@ -670,7 +552,9 @@
         if(inputs.length === 0) return; 
         let allFilled = true; inputs.forEach(inp => { if(inp.value === "") allFilled = false; });
         const btn = document.getElementById(`btn_row_${rowIdx}`);
-        if(inputs[0].disabled) btn.style.visibility = 'hidden'; else btn.style.visibility = allFilled ? "visible" : "hidden";
+        if (btn) {
+            if(inputs[0].disabled) btn.style.visibility = 'hidden'; else btn.style.visibility = allFilled ? "visible" : "hidden";
+        }
     }
 
     function getRowExpectedValue(rowIdx) {
@@ -698,20 +582,22 @@
         });
         const btn = document.getElementById(`btn_row_${rowIdx}`);
         if (rowIsCorrect) {
-            btn.style.visibility = 'hidden';
+            if (btn) btn.style.visibility = 'hidden';
             document.querySelectorAll(`input[id^="inp_${rowIdx}_"]`).forEach(inp => inp.disabled = true);
             if(rowIdx === 4) {
                 document.getElementById('finishBtn').classList.remove('btn-hidden');
             }
         } else if (!silent) {
-            btn.innerText = "پاک‌کن"; btn.classList.add('btn-eraser');
-            btn.onclick = function() { 
-                document.querySelectorAll(`input[id^="inp_${rowIdx}_"]`).forEach(i => {
-                    i.value = ""; 
-                    i.classList.remove('wrong-input', 'correct-input');
-                }); 
-                saveGridState(); resetBtnToCheck(btn, rowIdx); 
-            };
+            if (btn) {
+                btn.innerText = "پاک‌کن"; btn.classList.add('btn-eraser');
+                btn.onclick = function() { 
+                    document.querySelectorAll(`input[id^="inp_${rowIdx}_"]`).forEach(i => {
+                        i.value = ""; 
+                        i.classList.remove('wrong-input', 'correct-input');
+                    }); 
+                    saveGridState(); resetBtnToCheck(btn, rowIdx); 
+                };
+            }
         }
         return rowIsCorrect;
     }
@@ -725,7 +611,7 @@
         const boxes = [document.getElementById('carry_0'), document.getElementById('carry_1'), document.getElementById('carry_2')];
         let targetBox = null;
         for(let box of boxes) {
-            if (!box.value) { targetBox = box; break; }
+            if (box && !box.value) { targetBox = box; break; }
         }
         if (targetBox) {
             targetBox.value = toPersianNum(val);
@@ -738,7 +624,7 @@
     function markCarryUsed(val) {
         const boxes = [document.getElementById('carry_0'), document.getElementById('carry_1'), document.getElementById('carry_2')];
         for(let box of boxes) {
-            if(box.value && toEnglishNum(box.value) == val && !box.classList.contains('used')) {
+            if(box && box.value && toEnglishNum(box.value) == val && !box.classList.contains('used')) {
                 box.classList.add('used'); box.classList.remove('active-carry');
                 checkCarryFilled(); saveGridState(); return;
             }
@@ -781,8 +667,8 @@
         
         for(let r=1; r<=4; r++) {
              const btn = document.getElementById(`btn_row_${r}`);
-             resetBtnToCheck(btn, r);
-             btn.style.visibility = 'hidden';
+             if (btn) resetBtnToCheck(btn, r);
+             if (btn) btn.style.visibility = 'hidden';
         }
         
         resetCarryOver();
@@ -852,7 +738,7 @@
                     
                     if (step > 0) {
                          const carryBoxes = [document.getElementById('carry_0'), document.getElementById('carry_1'), document.getElementById('carry_2')];
-                         const availableCarry = Array.from(carryBoxes).find(b => b.value && !b.classList.contains('used'));
+                         const availableCarry = Array.from(carryBoxes).find(b => b && b.value && !b.classList.contains('used'));
                          if(availableCarry) { currentCarry = parseInt(toEnglishNum(availableCarry.value)); }
                     }
                     
