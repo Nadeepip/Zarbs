@@ -7,31 +7,174 @@
     <script src="supabase.js" defer></script>
     <script src="game-db.js" defer></script>
     <style>
-        @font-face{font-family:'Vazirmatn';src:url('Vazirmatn-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;}
-        @font-face{font-family:'Vazirmatn';src:url('Vazirmatn-Bold.woff2') format('woff2');font-weight:bold;font-style:normal;}
-        :root{--primary:#2c3e50;--accent:#27ae60;--wrong:#c0392b;--highlight:#f39c12;--bg:#f0f4f8;--box-bg:#ffffff;--sent:#7f8c8d;--carry-red:#e74c3c;}
-        *{box-sizing:border-box;font-family:'Vazirmatn',sans-serif;margin:0;padding:0;}
-        body{background-color:var(--bg);display:flex;justify-content:center;align-items:center;min-height:100vh;color:var(--primary);padding:10px;-webkit-tap-highlight-color:transparent;}
-        .screen{display:none !important;}
-        .screen.active{display:block !important;}
-        .hidden{display:none !important;}
-        #portal-submitting-screen.active{display:flex !important;}
-        #screen-assistant.active{display:block !important;}
-        .container{background:var(--box-bg);padding:20px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.1);width:100%;max-width:600px;text-align:center;position:relative;}
-        h1,h2{margin-bottom:10px;color:#2980b9;font-size:1.4em;}
-        .school-name{font-size:0.85em;color:#7f8c8d;margin-bottom:15px;border-bottom:1px solid #eee;padding-bottom:8px;display:block;}
-        .carry-over-container{position:absolute;top:130px;right:2px;background:rgba(255,248,225,0.95);border:1px dashed #f1c40f;padding:5px;border-radius:8px;display:flex;flex-direction:column;gap:6px;box-shadow:0 2px 5px rgba(0,0,0,0.05);z-index:50;}
-        .carry-input{width:32px;height:32px;border:1px solid #ccc;border-radius:50%;text-align:center;font-size:1.2em;outline:none;cursor:pointer;background:white;padding:0;margin:0;transition:all 0.3s;}
-        .carry-input.active-carry{border-color:#e74c3c;background-color:#fadbd8;font-weight:bold;}
-        .carry-input.used{text-decoration:line-through;color:#aaa;background:#eee;}
-        .btn{background-color:var(--accent);color:white;border:none;padding:10px 15px;font-size:0.95em;border-radius:8px;cursor:pointer;margin:5px;font-weight:bold;}
-        .btn-secondary{background-color:#e67e22;}
-        .btn-info{background-color:#3498db;}
-        .btn-hidden{display:none !important;}
-        .btn-eraser{background-color:var(--wrong) !important;}
-        .carry-clear-btn{padding:5px 8px !important;font-size:1.1em !important;width:fit-content;margin:5px 0 0 0 !important;align-self:flex-end;border-radius:5px;line-height:1;}
-        .row-check-btn{padding:0;font-size:0.75em;background-color:#3498db;border-radius:5px;height:34px;width:60px;display:flex;align-items:center;justify-content:center;visibility:hidden;margin:0 auto;}
-        .math-grid{display:inline-grid;grid-template-columns:repeat(7,40px) 70px;gap:6px 4px;margin:20px auto;direction:ltr;align-items:center;justify-content:center;}
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('Vazirmatn-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Vazirmatn';
+            src: url('Vazirmatn-Bold.woff2') format('woff2');
+            font-weight: bold;
+            font-style: normal;
+        }
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --wrong: #c0392b;
+            --highlight: #f39c12;
+            --bg: #f0f4f8;
+            --box-bg: #ffffff;
+            --sent: #7f8c8d;
+            --carry-red: #e74c3c;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--primary);
+            padding: 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .screen {
+            display: none !important;
+        }
+        .screen.active {
+            display: block !important;
+        }
+        .hidden {
+            display: none !important;
+        }
+        #portal-submitting-screen.active {
+            display: flex !important;
+        }
+        #screen-assistant.active {
+            display: block !important;
+        }
+        .container {
+            background: var(--box-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+        h1, h2 {
+            margin-bottom: 10px;
+            color: #2980b9;
+            font-size: 1.4em;
+        }
+        .school-name {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            display: block;
+        }
+        .carry-over-container {
+            position: absolute;
+            top: 130px;
+            right: 2px;
+            background: rgba(255, 248, 225, 0.95);
+            border: 1px dashed #f1c40f;
+            padding: 5px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            z-index: 50;
+        }
+        .carry-input {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 1.2em;
+            outline: none;
+            cursor: pointer;
+            background: white;
+            padding: 0;
+            margin: 0;
+            transition: all 0.3s;
+        }
+        .carry-input.active-carry {
+            border-color: #e74c3c;
+            background-color: #fadbd8;
+            font-weight: bold;
+        }
+        .carry-input.used {
+            text-decoration: line-through;
+            color: #aaa;
+            background: #eee;
+        }
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 0.95em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .btn-secondary {
+            background-color: #e67e22;
+        }
+        .btn-info {
+            background-color: #3498db;
+        }
+        .btn-hidden {
+            display: none !important;
+        }
+        .btn-eraser {
+            background-color: var(--wrong) !important;
+        }
+        .carry-clear-btn {
+            padding: 5px 8px !important;
+            font-size: 1.1em !important;
+            width: fit-content;
+            margin: 5px 0 0 0 !important;
+            align-self: flex-end;
+            border-radius: 5px;
+            line-height: 1;
+        }
+        .row-check-btn {
+            padding: 0;
+            font-size: 0.75em;
+            background-color: #3498db;
+            border-radius: 5px;
+            height: 34px;
+            width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            margin: 0 auto;
+        }
+        .math-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(7, 40px) 70px;
+            gap: 6px 4px;
+            margin: 20px auto;
+            direction: ltr;
+            align-items: center;
+            justify-content: center;
+        }
         @media (max-width: 450px) {
             .math-grid {
                 grid-template-columns: repeat(7, 34px) 60px;
@@ -47,29 +190,166 @@
                 height: 18px;
             }
         }
-        .cell{display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:bold;transition:all 0.3s;border-radius:50%;width:38px;height:38px;}
-        .add-carry-cell{display:flex;align-items:flex-end;justify-content:center;font-size:1em;font-weight:bold;color:var(--carry-red);height:20px;width:100%;margin-bottom:-8px;z-index:10;}
-        .highlight-digit{background-color:#ffe082;color:#d35400;border:2px solid #f39c12;transform:scale(1.1);}
-        .col-highlight{background-color:#e3f2fd;border-radius:4px;}
-        .input-cell{width:38px;height:38px;font-size:1.3em;text-align:center;border:2px solid #bdc3c7;border-radius:6px;background:#fafafa;padding:0;-moz-appearance:textfield;}
-        .input-cell:focus{background:#e8f0fe;border-color:#2980b9;}
-        .input-cell:read-only{background:#f0f0f0;color:#555;cursor:default;}
-        .correct-input{background-color:#d4edda !important;border-color:var(--accent) !important;color:var(--accent);}
-        .wrong-input{background-color:#f8d7da !important;border-color:var(--wrong) !important;color:var(--wrong);cursor:pointer;}
-        .line{grid-column:1/9;height:2px;background-color:#333;margin:4px 0;}
-        .operator{grid-column:1/2;display:flex;align-items:center;justify-content:center;font-size:1.4em;color:#555;}
-        .stats-bar{display:flex;justify-content:space-between;background:#ecf0f1;padding:8px 12px;border-radius:8px;margin-bottom:15px;font-size:0.9em;}
-        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
-        .modal-box{background:white;padding:25px 20px;border-radius:15px;width:90%;max-width:350px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.25);animation:fadeIn 0.3s ease-out;}
-        .modal-title{font-weight:bold;font-size:1.2em;color:#c0392b;margin-bottom:10px;}
-        .modal-text{font-size:0.95em;color:#555;line-height:1.6;margin-bottom:20px;}
-        .modal-buttons{display:flex;justify-content:center;gap:10px;}
-        .hint-alert{background:#fff3cd;color:#856404;padding:10px;border-radius:5px;margin-top:15px;font-size:0.9em;display:none;border:1px solid #ffeeba;text-align:right;line-height:1.6;}
-        @keyframes blink-fill{0%{background-color:#ffe082;transform:scale(1.1);box-shadow:0 0 10px #f39c12;}50%{background-color:#f1c40f;transform:scale(1.15);border-color:#d35400;}100%{background-color:#d4edda;transform:scale(1);box-shadow:none;}}
-        .newly-filled{animation:blink-fill 1.2s ease-in-out;z-index:20;}
-        @keyframes blink-text{0%{transform:scale(1.5);color:#d35400;}50%{transform:scale(1.8);color:#e74c3c;}100%{transform:scale(1);color:var(--carry-red);}}
-        .newly-filled-text{animation:blink-text 1.2s ease-in-out;}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+        .cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: all 0.3s;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+        }
+        .add-carry-cell {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--carry-red);
+            height: 20px;
+            width: 100%;
+            margin-bottom: -8px;
+            z-index: 10;
+        }
+        .highlight-digit {
+            background-color: #ffe082;
+            color: #d35400;
+            border: 2px solid #f39c12;
+            transform: scale(1.1);
+        }
+        .col-highlight {
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+        .input-cell {
+            width: 38px;
+            height: 38px;
+            font-size: 1.3em;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            background: #fafafa;
+            padding: 0;
+            -moz-appearance: textfield;
+        }
+        .input-cell:focus {
+            background: #e8f0fe;
+            border-color: #2980b9;
+        }
+        .input-cell:read-only {
+            background: #f0f0f0;
+            color: #555;
+            cursor: default;
+        }
+        .correct-input {
+            background-color: #d4edda !important;
+            border-color: var(--accent) !important;
+            color: var(--accent);
+        }
+        .wrong-input {
+            background-color: #f8d7da !important;
+            border-color: var(--wrong) !important;
+            color: var(--wrong);
+            cursor: pointer;
+        }
+        .line {
+            grid-column: 1 / 9;
+            height: 2px;
+            background-color: #333;
+            margin: 4px 0;
+        }
+        .operator {
+            grid-column: 1 / 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            color: #555;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #ecf0f1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+        .modal-box {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #c0392b;
+            margin-bottom: 10px;
+        }
+        .modal-text {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .hint-alert {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+            border: 1px solid #ffeeba;
+            text-align: right;
+            line-height: 1.6;
+        }
+        @keyframes blink-fill {
+            0% { background-color: #ffe082; transform: scale(1.1); box-shadow: 0 0 10px #f39c12; }
+            50% { background-color: #f1c40f; transform: scale(1.15); border-color: #d35400; }
+            100% { background-color: #d4edda; transform: scale(1); box-shadow: none; }
+        }
+        .newly-filled {
+            animation: blink-fill 1.2s ease-in-out;
+            z-index: 20;
+        }
+        @keyframes blink-text {
+            0% { transform: scale(1.5); color: #d35400; }
+            50% { transform: scale(1.8); color: #e74c3c; }
+            100% { transform: scale(1); color: var(--carry-red); }
+        }
+        .newly-filled-text {
+            animation: blink-text 1.2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -81,45 +361,6 @@
         <div id="portal-loading-bar" style="background: linear-gradient(90deg, #ff007f, #aa00ff, #00b0ff); width:0%; height:100%; transition:width 0.3s ease; box-shadow: 0 0 10px rgba(170,0,255,0.5);"></div>
     </div>
     <p id="portal-loading-text" style="font-size:13pt; color:#2c3e50; font-weight:bold;"></p>
-</div>
-
-<div id="portal-submitting-screen" class="screen" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-    <div class="container" style="max-width: 450px;">
-        <h3 id="portal-progress-title" style="color:#2c3e50; margin-bottom:15px; font-weight:bold; font-size:16pt;">⏳ در حال ارسال نتایج به دیتابیس کلاس...</h3>
-        <div style="background:#eee; border-radius:10px; height:20px; width:100%; overflow:hidden; margin-bottom:15px; border:1px solid #ccc;">
-            <div id="portal-progress-bar" style="background:linear-gradient(90deg, #ff007f, #aa00ff, #00b0ff); width:0%; height:100%; transition:width 0.2s;"></div>
-        </div>
-        <p id="portal-submit-status-text" style="font-size:12pt; color:#555; font-weight:bold; line-height:1.6; direction:rtl;"></p>
-        <button id="portal-retry-submit-btn" style="display:none; margin:15px auto 0; background:#e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">🔄 تلاش مجدد برای ارسال</button>
-    </div>
-</div>
-
-<div id="screen-assistant" class="screen">
-    <div class="container" style="max-width: 450px;">
-        <h2 style="color: #2c3e50; margin-bottom: 20px; font-size: 1.5rem;">🌟 دستیار ثبت ستاره 🌟</h2>
-        <div style="background: #fff; border: 2px dashed #3498db; border-radius: 12px; padding: 20px; margin-bottom: 25px; line-height: 1.8; text-align: justify; direction: rtl;">
-            <span style="font-size: 14pt; font-weight: bold; color: #2c3e50; display: block; margin-bottom: 10px;" id="ast-welcome">سلام قهرمان!</span>
-            <p style="font-size: 11pt; color: #333; margin: 0;">
-                بازی قبلی‌ات با موفقیت تمام شده بود، اما به خاطر قطع شدن اینترنت، ستاره‌ی طلایی‌ات به دفتر کلاسی معلم نرسیده بود. 
-                اصلاً نگران نباش! نیازی به بازی دوباره نیست. دکمه زیر را بزن تا ستاره‌ات ثبت بشه و کارنامه‌ات رو ببینی. 😊
-            </p>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 10px; background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 10px; padding: 15px; margin-bottom: 25px; text-align: right; direction: rtl; font-size:12pt;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span>👤 نامت:</span>
-                <span id="ast-name" style="font-weight:bold; color:#2c3e50;">---</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span>⭐ ستاره‌های ثبت‌شده قبلی:</span>
-                <span id="ast-stars" style="font-weight:bold; color:#f39c12;">۰ ⭐</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span>🎯 ستاره هدف تکلیف:</span>
-                <span id="ast-req-stars" style="font-weight:bold; color:#27ae60;">۰ ⭐</span>
-            </div>
-        </div>
-        <button style="width: 100%; height: 50px; background: #2ecc71; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size:13pt;" onclick="submitAssistantStar()">🌟 ثبت ستاره‌ی طلایی من و دریافت کارنامه</button>
-    </div>
 </div>
 
 <div id="confirmModal" class="modal-overlay">
@@ -221,6 +462,43 @@
 
         <br>
         <button id="playAgainBtn" class="btn" onclick="restartGame()">تلاش دوباره 🔄</button>
+    </div>
+
+    <div id="portal-submitting-screen" class="screen" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
+        <div class="container" style="max-width: 450px;">
+            <h3 id="portal-progress-title" style="color:#2c3e50; margin-bottom:15px; font-weight:bold; font-size:16pt;">⏳ در حال ارسال نتایج به دیتابیس کلاس...</h3>
+            <div style="background:#eee; border-radius:10px; height:20px; width:100%; overflow:hidden; margin-bottom:15px; border:1px solid #ccc;">
+                <div id="portal-progress-bar" style="background:linear-gradient(90deg, #ff007f, #aa00ff, #00b0ff); width:0%; height:100%; transition:width 0.2s;"></div>
+            </div>
+            <p id="portal-submit-status-text" style="font-size:12pt; color:#555; font-weight:bold; line-height:1.6; direction:rtl;"></p>
+            <button id="portal-retry-submit-btn" style="display:none; margin:15px auto 0; background:#e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">🔄 تلاش مجدد برای ارسال</button>
+        </div>
+    </div>
+
+    <div id="screen-assistant" class="screen" style="max-width: 450px; margin: 0 auto;">
+        <h2 style="color: #2c3e50; margin-bottom: 20px; font-size: 1.5rem;">🌟 دستیار ثبت ستاره 🌟</h2>
+        <div style="background: #fff; border: 2px dashed #3498db; border-radius: 12px; padding: 20px; margin-bottom: 25px; line-height: 1.8; text-align: justify; direction: rtl;">
+            <span style="font-size: 14pt; font-weight: bold; color: #2c3e50; display: block; margin-bottom: 10px;" id="ast-welcome">سلام قهرمان!</span>
+            <p style="font-size: 11pt; color: #333; margin: 0;">
+                بازی قبلی‌ات با موفقیت تمام شده بود، اما به خاطر قطع شدن اینترنت، ستاره‌ی طلایی‌ات به دفتر کلاسی معلم نرسیده بود. 
+                اصلاً نگران نباش! نیازی به بازی دوباره نیست. دکمه زیر را بزن تا ستاره‌ات ثبت بشه و کارنامه‌ات رو ببینی. 😊
+            </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 10px; padding: 15px; margin-bottom: 25px; text-align: right; direction: rtl; font-size:12pt;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>👤 نامت:</span>
+                <span id="ast-name" style="font-weight:bold; color:#2c3e50;">---</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>⭐ ستاره‌های ثبت‌شده قبلی:</span>
+                <span id="ast-stars" style="font-weight:bold; color:#f39c12;">۰ ⭐</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>🎯 ستاره هدف تکلیف:</span>
+                <span id="ast-req-stars" style="font-weight:bold; color:#27ae60;">۰ ⭐</span>
+            </div>
+        </div>
+        <button style="width: 100%; height: 50px; background: #2ecc71; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size:13pt;" onclick="submitAssistantStar()">🌟 ثبت ستاره‌ی طلایی من و دریافت کارنامه</button>
     </div>
 </div>
 
@@ -419,7 +697,9 @@
 
     function resetCarryOver() {
         document.querySelectorAll('.carry-input').forEach(inp => {
-            inp.value = ''; inp.classList.remove('used', 'active-carry');
+            if (inp) {
+                inp.value = ''; inp.classList.remove('used', 'active-carry');
+            }
         });
         const btn = document.getElementById('clearCarryBtn');
         if (btn) btn.classList.add('btn-hidden'); 
@@ -429,7 +709,7 @@
     function checkCarryFilled() {
         const boxes = document.querySelectorAll('.carry-input');
         let filledCount = 0;
-        boxes.forEach(inp => { if (inp.value) filledCount++; });
+        boxes.forEach(inp => { if (inp && inp.value) filledCount++; });
         const btn = document.getElementById('clearCarryBtn');
         if (btn) {
             if (filledCount > 0) btn.classList.remove('btn-hidden');
@@ -438,7 +718,7 @@
     }
 
     function handleCarryInput(el) {
-        if(el.value) {
+        if(el && el.value) {
             let engVal = toEnglishNum(el.value);
             el.value = !isNaN(engVal) ? toPersianNum(engVal) : "";
         }
@@ -448,7 +728,7 @@
     }
 
     function toggleStrike(el) { 
-        if(el.value) {
+        if(el && el.value) {
             el.classList.toggle('used');
             el.classList.remove('active-carry'); 
             checkCarryFilled(); 
@@ -656,197 +936,228 @@
     }
 
     function revealOneStepHint() {
-        if (state.currentGameUsedHint) {
-            executeHintLogic();
-        } else {
-            document.getElementById('confirmModal').style.display = 'flex';
+        try {
+            if (state.currentGameUsedHint) {
+                executeHintLogic();
+            } else {
+                const modal = document.getElementById('confirmModal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                } else {
+                    startPracticeMode();
+                }
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 
     function closeModal() {
-        document.getElementById('confirmModal').style.display = 'none';
+        const modal = document.getElementById('confirmModal');
+        if (modal) modal.style.display = 'none';
     }
 
     function startPracticeMode() {
-        closeModal();
-        state.currentGameUsedHint = true;
-        
-        document.querySelectorAll('.input-cell').forEach(inp => {
-            inp.value = '';
-            inp.classList.remove('correct-input', 'wrong-input');
-            inp.disabled = false;
-            inp.readOnly = true; 
-        });
-        
-        for(let r=1; r<=4; r++) {
-             const btn = document.getElementById(`btn_row_${r}`);
-             if (btn) resetBtnToCheck(btn, r);
-             if (btn) btn.style.visibility = 'hidden';
-        }
-        
-        resetCarryOver();
-        document.querySelectorAll('.add-carry-cell').forEach(el => el.innerText = '');
+        try {
+            closeModal();
+            state.currentGameUsedHint = true;
+            
+            document.querySelectorAll('.input-cell').forEach(inp => {
+                if (inp) {
+                    inp.value = '';
+                    inp.classList.remove('correct-input', 'wrong-input');
+                    inp.disabled = false;
+                    inp.readOnly = true; 
+                }
+            });
+            
+            for(let r=1; r<=4; r++) {
+                 const btn = document.getElementById(`btn_row_${r}`);
+                 if (btn) resetBtnToCheck(btn, r);
+                 if (btn) btn.style.visibility = 'hidden';
+            }
+            
+            resetCarryOver();
+            document.querySelectorAll('.add-carry-cell').forEach(el => {
+                if (el) el.innerText = '';
+            });
 
-        state.gridValues = {};
-        state.carryStates = {};
-        state.addCarryValues = {};
-        saveProfile();
-        saveGameState();
-        
-        executeHintLogic();
+            state.gridValues = {};
+            state.carryStates = {};
+            state.addCarryValues = {};
+            saveProfile();
+            saveGameState();
+            
+            executeHintLogic();
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     function executeHintLogic() {
-        clearHighlights();
-        const p = state.currentProblem;
-        const n1Str = p.n1.toString();
-        const n2Str = p.n2.toString();
-
-        for(let r=1; r<=4; r++) {
-            const inputs = Array.from(document.querySelectorAll(`input[id^="inp_${r}_"]`));
-            inputs.sort((a,b) => parseInt(b.id.split('_')[2]) - parseInt(a.id.split('_')[2])); 
-
-            if(inputs.length > 0 && inputs[0].disabled) continue;
-
-            if(r === 2) {
-                const zInp = document.getElementById(`inp_2_6`);
-                if(zInp && !zInp.value) {
-                    resetCarryOver(); 
-                    zInp.value = toPersianNum(0); zInp.classList.add('correct-input');
-                    flashElement(zInp);
-                    showHintAlert("چون داری دهگان رو ضرب می‌کنی، اول یه دونه صفر خوشگل بذار اینجا! (جعبه‌ی انتقال هم پاک شد)");
-                    saveGridState(); checkRowFilled(r); return;
-                }
+        try {
+            clearHighlights();
+            const p = state.currentProblem;
+            if (!p) {
+                newQuestion();
+                return;
             }
-            if(r === 3) { 
-                const zInp1 = document.getElementById(`inp_3_6`);
-                const zInp2 = document.getElementById(`inp_3_5`);
-                if(zInp1 && !zInp1.value) {
-                    resetCarryOver(); 
-                    zInp1.value = toPersianNum(0); zInp1.classList.add('correct-input');
-                    flashElement(zInp1);
-                    showHintAlert("چون داری صدگان رو ضرب می‌کنی، اول صفر اول رو می‌گذاریم. (جعبه‌ی انتقال هم پاک شد)");
-                    saveGridState(); checkRowFilled(r); return;
-                }
-                if(zInp2 && !zInp2.value) {
-                    zInp2.value = toPersianNum(0); zInp2.classList.add('correct-input');
-                    flashElement(zInp2);
-                    showHintAlert("سپس صفر دوم رو هم برای صدگان بذار!");
-                    saveGridState(); checkRowFilled(r); return;
-                }
-            }
-            
-            if(r <= 3) {
-                if(r === 1 && inputs.every(inp => inp.value === "")) resetCarryOver();
-                
-                const multiplierDigit = parseInt(n2Str[3-r]);
-                const multiplierPlace = r===1 ? "یکان" : r===2 ? "دهگان" : "صدگان";
-                
-                let currentCarry = 0;
-                let shift = (r-1); 
-                
-                for(let step=0; step<3; step++) { 
-                    const topDigit = parseInt(n1Str[2-step]);
-                    const topPlace = step===0 ? "یکان" : step===1 ? "دهگان" : "صدگان";
-                    
-                    if (step > 0) {
-                         const carryBoxes = [document.getElementById('carry_0'), document.getElementById('carry_1'), document.getElementById('carry_2')];
-                         const availableCarry = Array.from(carryBoxes).find(b => b && b.value && !b.classList.contains('used'));
-                         if(availableCarry) { currentCarry = parseInt(toEnglishNum(availableCarry.value)); }
+            const n1Str = p.n1.toString();
+            const n2Str = p.n2.toString();
+
+            for(let r=1; r<=4; r++) {
+                const inputs = Array.from(document.querySelectorAll(`input[id^="inp_${r}_"]`));
+                inputs.sort((a,b) => parseInt(b.id.split('_')[2]) - parseInt(a.id.split('_')[2])); 
+
+                if(inputs.length > 0 && inputs[0].disabled) continue;
+
+                if(r === 2) {
+                    const zInp = document.getElementById(`inp_2_6`);
+                    if(zInp && !zInp.value) {
+                        resetCarryOver(); 
+                        zInp.value = toPersianNum(0); zInp.classList.add('correct-input');
+                        flashElement(zInp);
+                        showHintAlert("چون داری دهگان رو ضرب می‌کنی، اول یه دونه صفر خوشگل بذار اینجا! (جعبه‌ی انتقال هم پاک شد)");
+                        saveGridState(); checkRowFilled(r); return;
                     }
+                }
+                if(r === 3) { 
+                    const zInp1 = document.getElementById(`inp_3_6`);
+                    const zInp2 = document.getElementById(`inp_3_5`);
+                    if(zInp1 && !zInp1.value) {
+                        resetCarryOver(); 
+                        zInp1.value = toPersianNum(0); zInp1.classList.add('correct-input');
+                        flashElement(zInp1);
+                        showHintAlert("چون داری صدگان رو ضرب می‌کنی، اول صفر اول رو می‌گذاریم. (جعبه‌ی انتقال هم پاک شد)");
+                        saveGridState(); checkRowFilled(r); return;
+                    }
+                    if(zInp2 && !zInp2.value) {
+                        zInp2.value = toPersianNum(0); zInp2.classList.add('correct-input');
+                        flashElement(zInp2);
+                        showHintAlert("سپس صفر دوم رو هم برای صدگان بذار!");
+                        saveGridState(); checkRowFilled(r); return;
+                    }
+                }
+                
+                if(r <= 3) {
+                    if(r === 1 && inputs.every(inp => inp && inp.value === "")) resetCarryOver();
                     
-                    const product = (topDigit * multiplierDigit) + currentCarry;
-                    const writeDigit = product % 10;
-                    const newCarry = Math.floor(product / 10);
+                    const multiplierDigit = parseInt(n2Str[3-r]);
+                    const multiplierPlace = r===1 ? "یکان" : r===2 ? "دهگان" : "صدگان";
                     
-                    const targetCol = 6 - shift - step; 
-                    const inp = document.getElementById(`inp_${r}_${targetCol}`);
+                    let currentCarry = 0;
+                    let shift = (r-1); 
                     
-                    if(inp && (inp.value === "" || inp.classList.contains('wrong-input'))) {
-                        document.getElementById(`q_bot_${3-r}`).classList.add('highlight-digit');
-                        document.getElementById(`q_top_${2-step}`).classList.add('highlight-digit');
-
-                        let msg = `یکانِ ضرب یعنی <b>${toPersianNum(multiplierDigit)}</b> رو در یکانِ بالا یعنی <b>${toPersianNum(topDigit)}</b> ضرب کن. حاصلش می‌شه <b>${toPersianNum(topDigit*multiplierDigit)}</b>. `;
+                    for(let step=0; step<3; step++) { 
+                        const topDigit = parseInt(n1Str[2-step]);
+                        const topPlace = step===0 ? "یکان" : step===1 ? "دهگان" : "صدگان";
                         
-                        if(currentCarry > 0) {
-                            msg += `حالا با <b>${toPersianNum(currentCarry)}</b> ستاره‌ی انتقالی جمعش کن که می‌شه <b>${toPersianNum(product)}</b>. `;
-                            markCarryUsed(currentCarry);
+                        if (step > 0) {
+                             const carryBoxes = [document.getElementById('carry_0'), document.getElementById('carry_1'), document.getElementById('carry_2')];
+                             const availableCarry = Array.from(carryBoxes).find(b => b && b.value && !b.classList.contains('used'));
+                             if(availableCarry) { currentCarry = parseInt(toEnglishNum(availableCarry.value)); }
                         }
                         
-                        if(step === 2 && newCarry > 0) {
-                            const carryInp = document.getElementById(`inp_${r}_${targetCol-1}`);
-                            if(carryInp) {
+                        const product = (topDigit * multiplierDigit) + currentCarry;
+                        const writeDigit = product % 10;
+                        const newCarry = Math.floor(product / 10);
+                        
+                        const targetCol = 6 - shift - step; 
+                        const inp = document.getElementById(`inp_${r}_${targetCol}`);
+                        
+                        if(inp && (inp.value === "" || inp.classList.contains('wrong-input'))) {
+                            const qBot = document.getElementById(`q_bot_${3-r}`);
+                            const qTop = document.getElementById(`q_top_${2-step}`);
+                            if (qBot) qBot.classList.add('highlight-digit');
+                            if (qTop) qTop.classList.add('highlight-digit');
+
+                            let msg = `یکانِ ضرب یعنی <b>${toPersianNum(multiplierDigit)}</b> رو در یکانِ بالا یعنی <b>${toPersianNum(topDigit)}</b> ضرب کن. حاصلش می‌شه <b>${toPersianNum(topDigit*multiplierDigit)}</b>. `;
+                            
+                            if(currentCarry > 0) {
+                                msg += `حالا با <b>${toPersianNum(currentCarry)}</b> ستاره‌ی انتقالی جمعش کن که می‌شه <b>${toPersianNum(product)}</b>. `;
+                                markCarryUsed(currentCarry);
+                            }
+                            
+                            if(step === 2 && newCarry > 0) {
+                                const carryInp = document.getElementById(`inp_${r}_${targetCol-1}`);
+                                if(carryInp) {
+                                    inp.value = toPersianNum(writeDigit); inp.classList.add('correct-input'); flashElement(inp);
+                                    carryInp.value = toPersianNum(newCarry); carryInp.classList.add('correct-input'); flashElement(carryInp);
+                                    msg += `<br>چون رقم آخره، کل عدد <b>${toPersianNum(product)}</b> رو کامل می‌نویسیم.`;
+                                } else { inp.value = toPersianNum(writeDigit); flashElement(inp); }
+                            } else {
                                 inp.value = toPersianNum(writeDigit); inp.classList.add('correct-input'); flashElement(inp);
-                                carryInp.value = toPersianNum(newCarry); carryInp.classList.add('correct-input'); flashElement(carryInp);
-                                msg += `<br>چون رقم آخره، کل عدد <b>${toPersianNum(product)}</b> رو کامل می‌نویسیم.`;
-                            } else { inp.value = toPersianNum(writeDigit); flashElement(inp); }
-                        } else {
-                            inp.value = toPersianNum(writeDigit); inp.classList.add('correct-input'); flashElement(inp);
-                            if(newCarry > 0) {
-                                msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم دهگان یعنی <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالا برای مرحله بعد.`;
-                                setCarryInBox(newCarry);
-                            } else { msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`; }
+                                if(newCarry > 0) {
+                                    msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم دهگان یعنی <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالا برای مرحله بعد.`;
+                                    setCarryInBox(newCarry);
+                                } else { msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`; }
+                            }
+                            showHintAlert(msg); saveGridState(); checkRowFilled(r); return;
                         }
-                        showHintAlert(msg); saveGridState(); checkRowFilled(r); return;
+                        currentCarry = newCarry;
                     }
-                    currentCarry = newCarry;
-                }
-            } else {
-                 let pendingCarry = 0;
-                 for(let i=6; i>=0; i--) {
-                     const inp1 = document.getElementById(`inp_1_${i}`);
-                     const inp2 = document.getElementById(`inp_2_${i}`);
-                     const inp3 = document.getElementById(`inp_3_${i}`);
-                     
-                     const val1 = inp1 && inp1.value ? parseInt(toEnglishNum(inp1.value)) : 0;
-                     const val2 = inp2 && inp2.value ? parseInt(toEnglishNum(inp2.value)) : 0;
-                     const val3 = inp3 && inp3.value ? parseInt(toEnglishNum(inp3.value)) : 0;
-                     
-                     const sum = val1 + val2 + val3 + pendingCarry;
-                     const writeDigit = sum % 10;
-                     const newCarry = Math.floor(sum / 10);
-                     
-                     const resultInp = document.getElementById(`inp_4_${i}`);
-                     
-                     if(resultInp && (resultInp.value === "" || resultInp.classList.contains('wrong-input'))) {
-                         if(inp1) inp1.parentElement.classList.add('col-highlight');
-                         if(inp2) inp2.parentElement.classList.add('col-highlight');
-                         if(inp3) inp3.parentElement.classList.add('col-highlight');
+                } else {
+                     let pendingCarry = 0;
+                     for(let i=6; i>=0; i--) {
+                         const inp1 = document.getElementById(`inp_1_${i}`);
+                         const inp2 = document.getElementById(`inp_2_${i}`);
+                         const inp3 = document.getElementById(`inp_3_${i}`);
                          
-                         resultInp.value = toPersianNum(writeDigit);
-                         resultInp.classList.add('correct-input');
-                         flashElement(resultInp);
+                         const val1 = inp1 && inp1.value ? parseInt(toEnglishNum(inp1.value)) : 0;
+                         const val2 = inp2 && inp2.value ? parseInt(toEnglishNum(inp2.value)) : 0;
+                         const val3 = inp3 && inp3.value ? parseInt(toEnglishNum(inp3.value)) : 0;
                          
-                         let msg = `بیا ستون رو با هم جمع کنیم: <b>${toPersianNum(val1)}</b> به علاوه‌ی <b>${toPersianNum(val2)}</b> به علاوه‌ی <b>${toPersianNum(val3)}</b>`;
-                         if(pendingCarry > 0) msg += ` + <span style="color:red; font-weight:bold">${toPersianNum(pendingCarry)}</span> (انتقالی)`;
-                         msg += ` = <b>${toPersianNum(sum)}</b>.`;
+                         const sum = val1 + val2 + val3 + pendingCarry;
+                         const writeDigit = sum % 10;
+                         const newCarry = Math.floor(sum / 10);
                          
-                         if(newCarry > 0) {
-                             msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالای ستون بعدی.`;
-                             const carryCell = document.getElementById(`ac_${i-1}`);
-                             if(carryCell) {
-                                 carryCell.innerText = toPersianNum(newCarry);
-                                 flashElement(carryCell);
+                         const resultInp = document.getElementById(`inp_4_${i}`);
+                         
+                         if(resultInp && (resultInp.value === "" || resultInp.classList.contains('wrong-input'))) {
+                             if(inp1) inp1.parentElement.classList.add('col-highlight');
+                             if(inp2) inp2.parentElement.classList.add('col-highlight');
+                             if(inp3) inp3.parentElement.classList.add('col-highlight');
+                             
+                             resultInp.value = toPersianNum(writeDigit);
+                             resultInp.classList.add('correct-input');
+                             flashElement(resultInp);
+                             
+                             let msg = `بیا ستون رو با هم جمع کنیم: <b>${toPersianNum(val1)}</b> به علاوه‌ی <b>${toPersianNum(val2)}</b> به علاوه‌ی <b>${toPersianNum(val3)}</b>`;
+                             if(pendingCarry > 0) msg += ` + <span style="color:red; font-weight:bold">${toPersianNum(pendingCarry)}</span> (انتقالی)`;
+                             msg += ` = <b>${toPersianNum(sum)}</b>.`;
+                             
+                             if(newCarry > 0) {
+                                 msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالای ستون بعدی.`;
+                                 const carryCell = document.getElementById(`ac_${i-1}`);
+                                 if(carryCell) {
+                                     carryCell.innerText = toPersianNum(newCarry);
+                                     flashElement(carryCell);
+                                 }
+                             } else {
+                                 msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`;
                              }
-                         } else {
-                             msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`;
+                             
+                             showHintAlert(msg);
+                             saveGridState(); checkRowFilled(4);
+                             return;
                          }
-                         
-                         showHintAlert(msg);
-                         saveGridState(); checkRowFilled(4);
-                         return;
+                         pendingCarry = newCarry;
                      }
-                     pendingCarry = newCarry;
-                 }
+                }
             }
+            showHintAlert("فوق‌العاده‌ای قهرمانم! همه‌ی مراحل رو کاملاً درست حل کردی! 🌟");
+            const finBtn = document.getElementById('finishBtn');
+            if (finBtn) finBtn.classList.remove('btn-hidden');
+        } catch (errHint) {
+            console.error(errHint);
         }
-        showHintAlert("فوق‌العاده‌ای قهرمانم! همه‌ی مراحل رو کاملاً درست حل کردی! 🌟");
-        document.getElementById('finishBtn').classList.remove('btn-hidden');
     }
 
     function showHintAlert(msg) {
         const box = document.getElementById('hintAlertBox');
-        box.innerHTML = msg; box.style.display = 'block';
+        if (box) {
+            box.innerHTML = msg; box.style.display = 'block';
+        }
     }
 
     function generateVerticalArt(starCount, currentMinute) {
