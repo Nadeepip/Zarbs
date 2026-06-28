@@ -282,9 +282,6 @@
             font-size: 1.4em;
             color: #555;
         }
-        .hidden {
-            display: none !important;
-        }
         .hint-alert {
             background: #fff3cd;
             color: #856404;
@@ -528,7 +525,12 @@
     function loadProfile() {
         const stored = localStorage.getItem(STORAGE);
         if (stored) {
-            try { state = { ...state, ...JSON.parse(stored) }; } catch(e){}
+            try { 
+                state = JSON.parse(stored); 
+                if (!state.gridValues) state.gridValues = {};
+                if (!state.carryStates) state.carryStates = {};
+                if (!state.addCarryValues) state.addCarryValues = {};
+            } catch(e){}
         }
     }
 
@@ -537,31 +539,41 @@
     }
 
     function saveGridState() {
-        document.querySelectorAll('.input-cell').forEach(inp => state.gridValues[inp.id] = inp.value);
+        document.querySelectorAll('.input-cell').forEach(inp => {
+            if (!state.gridValues) state.gridValues = {};
+            state.gridValues[inp.id] = inp.value;
+        });
         document.querySelectorAll('.carry-input').forEach(inp => {
+            if (!state.gridValues) state.gridValues = {};
+            if (!state.carryStates) state.carryStates = {};
             state.gridValues[inp.id] = inp.value;
             state.carryStates[inp.id] = inp.classList.contains('used');
         });
         state.addCarryValues = {};
         for(let i=0; i<7; i++) {
             const el = document.getElementById(`ac_${i}`);
-            if(el && el.innerText) state.addCarryValues[`ac_${i}`] = el.innerText;
+            if(el && el.innerText) {
+                if (!state.addCarryValues) state.addCarryValues = {};
+                state.addCarryValues[`ac_${i}`] = el.innerText;
+            }
         }
         saveProfile();
         saveGameState();
     }
 
     function restoreGridState() {
-        for (const [id, val] of Object.entries(state.gridValues)) {
+        const gVals = state.gridValues || {};
+        const cStates = state.carryStates || {};
+        const acVals = state.addCarryValues || {};
+
+        for (const [id, val] of Object.entries(gVals)) {
             const el = document.getElementById(id); if (el) el.value = val;
         }
-        for (const [id, isUsed] of Object.entries(state.carryStates)) {
+        for (const [id, isUsed] of Object.entries(cStates)) {
             const el = document.getElementById(id); if (el && isUsed) el.classList.add('used');
         }
-        if(state.addCarryValues) {
-            for (const [id, val] of Object.entries(state.addCarryValues)) {
-                const el = document.getElementById(id); if (el) el.innerText = val;
-            }
+        for (const [id, val] of Object.entries(acVals)) {
+            const el = document.getElementById(id); if (el) el.innerText = val;
         }
         
         if(state.currentGameUsedHint) {
@@ -1180,7 +1192,7 @@
             playAgainBtn.innerText = "بازی دوباره بدون کمک 💡";
             backInstruction.innerHTML = `
                 <div style="background:#fff3e0; border:1px solid #ffe082; color:#e65100; padding:12px; border-radius:12px; margin-top:10px; font-size:11.5pt; line-height:1.6; text-align:center;">
-                    💡 این دور بازی‌ات آموزشی بود و برای گرفتن ستاره باید بدون کمک حلش کنی. دکمه بالا رو بزن تا بدون کمک تلاش کنی!
+                    💡 این دور بازی‌ات آموزشی بود و برای گرفتن ستاره باید بدون کمک حلش کنی. دکمه پایین رو بزن تا بدون کمک تلاش کنی!
                 </div>
             `;
             backInstruction.style.display = 'block';
@@ -1240,9 +1252,9 @@
     function saveGameState() {
         localStorage.setItem(GAME_STATE_STORAGE, JSON.stringify({
             currentProblem: state.currentProblem,
-            gridValues: state.gridValues,
-            carryStates: state.carryStates,
-            addCarryValues: state.addCarryValues,
+            gridValues: state.gridValues || {},
+            carryStates: state.carryStates || {},
+            addCarryValues: state.addCarryValues || {},
             currentGameUsedHint: state.currentGameUsedHint
         }));
     }
@@ -1253,9 +1265,9 @@
             try {
                 const d = JSON.parse(saved);
                 state.currentProblem = d.currentProblem;
-                state.gridValues = d.gridValues;
-                state.carryStates = d.carryStates;
-                state.addCarryValues = d.addCarryValues;
+                state.gridValues = d.gridValues || {};
+                state.carryStates = d.carryStates || {};
+                state.addCarryValues = d.addCarryValues || {};
                 state.currentGameUsedHint = d.currentGameUsedHint;
             } catch (e) {}
         }
@@ -1293,6 +1305,9 @@
                 if (saved) {
                     try {
                         state = JSON.parse(saved);
+                        if (!state.gridValues) state.gridValues = {};
+                        if (!state.carryStates) state.carryStates = {};
+                        if (!state.addCarryValues) state.addCarryValues = {};
                         if (typeof state.currentGameUsedHint === 'undefined') state.currentGameUsedHint = false;
                         if (typeof state.currentScreen === 'undefined') state.currentScreen = 'register';
                     } catch (e) {}
