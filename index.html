@@ -190,166 +190,29 @@
                 height: 18px;
             }
         }
-        .cell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            transition: all 0.3s;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-        }
-        .add-carry-cell {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            font-size: 1em;
-            font-weight: bold;
-            color: var(--carry-red);
-            height: 20px;
-            width: 100%;
-            margin-bottom: -8px;
-            z-index: 10;
-        }
-        .highlight-digit {
-            background-color: #ffe082;
-            color: #d35400;
-            border: 2px solid #f39c12;
-            transform: scale(1.1);
-        }
-        .col-highlight {
-            background-color: #e3f2fd;
-            border-radius: 4px;
-        }
-        .input-cell {
-            width: 38px;
-            height: 38px;
-            font-size: 1.3em;
-            text-align: center;
-            border: 2px solid #bdc3c7;
-            border-radius: 6px;
-            background: #fafafa;
-            padding: 0;
-            -moz-appearance: textfield;
-        }
-        .input-cell:focus {
-            background: #e8f0fe;
-            border-color: #2980b9;
-        }
-        .input-cell:read-only {
-            background: #f0f0f0;
-            color: #555;
-            cursor: default;
-        }
-        .correct-input {
-            background-color: #d4edda !important;
-            border-color: var(--accent) !important;
-            color: var(--accent);
-        }
-        .wrong-input {
-            background-color: #f8d7da !important;
-            border-color: var(--wrong) !important;
-            color: var(--wrong);
-            cursor: pointer;
-        }
-        .line {
-            grid-column: 1 / 9;
-            height: 2px;
-            background-color: #333;
-            margin: 4px 0;
-        }
-        .operator {
-            grid-column: 1 / 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4em;
-            color: #555;
-        }
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            background: #ecf0f1;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-        }
-        .modal-box {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            animation: fadeIn 0.3s ease-out;
-        }
-        .modal-title {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #c0392b;
-            margin-bottom: 10px;
-        }
-        .modal-text {
-            font-size: 0.95em;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .hint-alert {
-            background: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            display: none;
-            border: 1px solid #ffeeba;
-            text-align: right;
-            line-height: 1.6;
-        }
-        @keyframes blink-fill {
-            0% { background-color: #ffe082; transform: scale(1.1); box-shadow: 0 0 10px #f39c12; }
-            50% { background-color: #f1c40f; transform: scale(1.15); border-color: #d35400; }
-            100% { background-color: #d4edda; transform: scale(1); box-shadow: none; }
-        }
-        .newly-filled {
-            animation: blink-fill 1.2s ease-in-out;
-            z-index: 20;
-        }
-        @keyframes blink-text {
-            0% { transform: scale(1.5); color: #d35400; }
-            50% { transform: scale(1.8); color: #e74c3c; }
-            100% { transform: scale(1); color: var(--carry-red); }
-        }
-        .newly-filled-text {
-            animation: blink-text 1.2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .cell{display:flex;align-items:center;justify-content:center;font-size:1.5em;font-weight:bold;transition:all 0.3s;border-radius:50%;width:38px;height:38px;}
+        .add-carry-cell{display:flex;align-items:flex-end;justify-content:center;font-size:1em;font-weight:bold;color:var(--carry-red);height:20px;width:100%;margin-bottom:-8px;z-index:10;}
+        .highlight-digit{background-color:#ffe082;color:#d35400;border:2px solid #f39c12;transform:scale(1.1);}
+        .col-highlight{background-color:#e3f2fd;border-radius:4px;}
+        .input-cell{width:38px;height:38px;font-size:1.3em;text-align:center;border:2px solid #bdc3c7;border-radius:6px;background:#fafafa;padding:0;-moz-appearance:textfield;}
+        .input-cell:focus{background:#e8f0fe;border-color:#2980b9;}
+        .input-cell:read-only{background:#f0f0f0;color:#555;cursor:default;}
+        .correct-input{background-color:#d4edda !important;border-color:var(--accent) !important;color:var(--accent);}
+        .wrong-input{background-color:#f8d7da !important;border-color:var(--wrong) !important;color:var(--wrong);cursor:pointer;}
+        .line{grid-column:1/9;height:2px;background-color:#333;margin:4px 0;}
+        .operator{grid-column:1/2;display:flex;align-items:center;justify-content:center;font-size:1.4em;color:#555;}
+        .stats-bar{display:flex;justify-content:space-between;background:#ecf0f1;padding:8px 12px;border-radius:8px;margin-bottom:15px;font-size:0.9em;}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+        .modal-box{background:white;padding:25px 20px;border-radius:15px;width:90%;max-width:350px;text-align:center;box-shadow:0 15px 35px rgba(0,0,0,0.25);animation:fadeIn 0.3s ease-out;}
+        .modal-title{font-weight:bold;font-size:1.2em;color:#c0392b;margin-bottom:10px;}
+        .modal-text{font-size:0.95em;color:#555;line-height:1.6;margin-bottom:20px;}
+        .modal-buttons{display:flex;justify-content:center;gap:10px;}
+        .hint-alert{background:#fff3cd;color:#856404;padding:10px;border-radius:5px;margin-top:15px;font-size:0.9em;display:none;border:1px solid #ffeeba;text-align:right;line-height:1.6;}
+        @keyframes blink-fill{0%{background-color:#ffe082;transform:scale(1.1);box-shadow:0 0 10px #f39c12;}50%{background-color:#f1c40f;transform:scale(1.15);border-color:#d35400;}100%{background-color:#d4edda;transform:scale(1);box-shadow:none;}}
+        .newly-filled{animation:blink-fill 1.2s ease-in-out;z-index:20;}
+        @keyframes blink-text{0%{transform:scale(1.5);color:#d35400;}50%{transform:scale(1.8);color:#e74c3c;}100%{transform:scale(1);color:var(--carry-red);}}
+        .newly-filled-text{animation:blink-text 1.2s ease-in-out;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
     </style>
 </head>
 <body>
@@ -1071,12 +934,13 @@
                             if (qBot) qBot.classList.add('highlight-digit');
                             if (qTop) qTop.classList.add('highlight-digit');
 
-                            let msg = `یکانِ ضرب یعنی <b>${toPersianNum(multiplierDigit)}</b> رو در یکانِ بالا یعنی <b>${toPersianNum(topDigit)}</b> ضرب کن. حاصلش می‌شه <b>${toPersianNum(topDigit*multiplierDigit)}</b>. `;
+                            let msg = `<b>${toPersianNum(multiplierDigit)}</b> در <b>${toPersianNum(topDigit)}</b> می‌شه <b>${toPersianNum(topDigit*multiplierDigit)}</b>`;
                             
                             if(currentCarry > 0) {
-                                msg += `حالا با <b>${toPersianNum(currentCarry)}</b> ستاره‌ی انتقالی جمعش کن که می‌شه <b>${toPersianNum(product)}</b>. `;
+                                msg += `، با <b>${toPersianNum(currentCarry)}</b> انتقال می‌شه <b>${toPersianNum(product)}</b>`;
                                 markCarryUsed(currentCarry);
                             }
+                            msg += `.`;
                             
                             if(step === 2 && newCarry > 0) {
                                 const carryInp = document.getElementById(`inp_${r}_${targetCol-1}`);
@@ -1088,9 +952,9 @@
                             } else {
                                 inp.value = toPersianNum(writeDigit); inp.classList.add('correct-input'); flashElement(inp);
                                 if(newCarry > 0) {
-                                    msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم دهگان یعنی <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالا برای مرحله بعد.`;
+                                    msg += `<br><b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم، <b>${toPersianNum(newCarry)}</b> رو می‌بریم بالا.`;
                                     setCarryInBox(newCarry);
-                                } else { msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`; }
+                                } else { msg += `<br><b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`; }
                             }
                             showHintAlert(msg); saveGridState(); checkRowFilled(r); return;
                         }
@@ -1122,19 +986,19 @@
                              resultInp.classList.add('correct-input');
                              flashElement(resultInp);
                              
-                             let msg = `بیا ستون رو با هم جمع کنیم: <b>${toPersianNum(val1)}</b> به علاوه‌ی <b>${toPersianNum(val2)}</b> به علاوه‌ی <b>${toPersianNum(val3)}</b>`;
-                             if(pendingCarry > 0) msg += ` + <span style="color:red; font-weight:bold">${toPersianNum(pendingCarry)}</span> (انتقالی)`;
-                             msg += ` = <b>${toPersianNum(sum)}</b>.`;
+                             let msg = `جمع ستون: <b>${toPersianNum(val1)}</b> + <b>${toPersianNum(val2)}</b> + <b>${toPersianNum(val3)}</b>`;
+                             if(pendingCarry > 0) msg += ` + <b>${toPersianNum(pendingCarry)}</b> (انتقال)`;
+                             msg += ` می‌شه <b>${toPersianNum(sum)}</b>.`;
                              
                              if(newCarry > 0) {
-                                 msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم و رقم <b>${toPersianNum(newCarry)}</b> رو می‌فرستیم بالای ستون بعدی.`;
+                                 msg += `<br><b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم، <b>${toPersianNum(newCarry)}</b> رو می‌بریم بالا.`;
                                  const carryCell = document.getElementById(`ac_${i-1}`);
                                  if(carryCell) {
                                      carryCell.innerText = toPersianNum(newCarry);
                                      flashElement(carryCell);
                                  }
                              } else {
-                                 msg += `<br>رقم <b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`;
+                                 msg += `<br><b>${toPersianNum(writeDigit)}</b> رو می‌نویسیم.`;
                              }
                              
                              showHintAlert(msg);
